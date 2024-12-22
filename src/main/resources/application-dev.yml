@@ -1,0 +1,2 @@
+batch:
+  resource: "src/main/resources/customers-data.txt"
