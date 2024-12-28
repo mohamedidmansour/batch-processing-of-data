@@ -2,7 +2,7 @@ package com.med.batch.job.customer.config;
 
 import com.med.batch.core.processor.IBatchItemProcessor;
 import com.med.batch.core.reader.IBatchItemReader;
-import com.med.batch.core.writer.IBatchItemWriter;
+import com.med.batch.core.writer.interfaces.IItemStreamItemWriter;
 import com.med.batch.model.Customer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
@@ -25,18 +25,18 @@ public class CustomerBatchConfig {
 
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
-    private final IBatchItemReader<Customer> reader;
-    private final IBatchItemProcessor<Customer, Customer> processor;
-    private final IBatchItemWriter<Customer> writer;
+    private final IBatchItemReader<Customer> customerReader;
+    private final IBatchItemProcessor<Customer, Customer> customerProcessor;
+    private final IItemStreamItemWriter<Customer> customerFlatFileWriter;
 
 
     @Bean
     public Step customerStep1() {
         return new StepBuilder(CUSTOMER_STEP_NAME, jobRepository)
                 .<Customer, Customer>chunk(CHUNK, transactionManager)
-                .reader(reader.createReader(new FileSystemResource("src/main/resources/customers-data.txt")))
-                .processor(processor)
-                .writer(writer)
+                .reader(customerReader.createReader(new FileSystemResource("src/main/resources/customers-data.txt")))
+                .processor(customerProcessor)
+                .writer(customerFlatFileWriter)
                 .build();
     }
 

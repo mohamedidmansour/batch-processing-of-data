@@ -1,5 +1,6 @@
 package com.med.batch.core.writer;
 
+import com.med.batch.core.writer.interfaces.IBatchItemWriter;
 import lombok.NonNull;
 import org.springframework.batch.item.Chunk;
 
