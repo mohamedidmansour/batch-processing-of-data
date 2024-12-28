@@ -1,12 +1,14 @@
 package com.med.batch.core.reader;
 
 import com.med.batch.interfaces.Deliminator;
+import lombok.NonNull;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.file.LineMapper;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
+import org.springframework.batch.item.file.separator.DefaultRecordSeparatorPolicy;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.batch.item.file.transform.LineTokenizer;
 import org.springframework.core.io.Resource;
@@ -27,6 +29,12 @@ public abstract class AbstractFileItemReader<T> implements IBatchItemReader<T> {
                 .name(getTargetClass().getSimpleName().toUpperCase() + "-READER")
                 .resource(resource)
                 .strict(false)
+                .recordSeparatorPolicy(new DefaultRecordSeparatorPolicy() {
+                    @Override
+                    public boolean isEndOfRecord(@NonNull String line) {
+                        return super.isEndOfRecord(line) && !line.trim().isEmpty();
+                    }
+                })
                 .linesToSkip(getLinesToSkip())
                 .lineMapper(lineMapper())
                 .build();
