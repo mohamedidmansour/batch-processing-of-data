@@ -1,16 +1,17 @@
 package com.med.batch.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Setter
-@Getter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@Builder
 public class Customer {
     private String id;
     private String firstName;
     private String lastName;
     private String salary;
-
 }
