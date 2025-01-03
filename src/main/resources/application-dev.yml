@@ -1,6 +1,6 @@
 batch:
   resource:
-    s1: "src/main/resources/datasource/CIH_BNK_data_100_000.txt"
-    s2: "src/main/resources/datasource/AN_data_1_000_000.txt"
+    s1: "src/main/resources/datasource/AN_data_1_000_000.min.txt"
+    s2: "src/main/resources/datasource/CIH_BNK_data_100_000.min.txt"
   output:
     s1: "src/main/resources/output/output1.txt"

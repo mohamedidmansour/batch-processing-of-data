@@ -5,6 +5,7 @@ import com.med.batch.core.reader.IBatchItemReader;
 import com.med.batch.core.writer.interfaces.IItemStreamItemWriter;
 import com.med.batch.exception.LineNotFormated;
 import com.med.batch.model.Customer;
+import com.med.batch.model.CustomerDataBNK;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.SkipListener;
@@ -22,17 +23,24 @@ import org.springframework.transaction.PlatformTransactionManager;
 @RequiredArgsConstructor
 @Configuration
 public class CustomerBatchConfig {
-    private static final String CUSTOMER_STEP_NAME = "customerStep1";
-    private static final String CUSTOMER_JOB_NAME = "customerJob1";
+    private static final String CUSTOMER_STEP_1_NAME = "customerStep1";
+    private static final String CUSTOMER_STEP_2_NAME = "customerStep2";
+    private static final String CUSTOMER_JOB_1_NAME = "customerJob1";
+    private static final String CUSTOMER_JOB_2_NAME = "customerJob2";
 
-    private static final int CHUNK = 10;
+    private static final int CHUNK = 200;
     private static final int SKIP_LIMIT = 5;
     private static final int RETRY_LIMIT = 5;
 
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
+
     private final IBatchItemReader<Customer> customerReader;
+    private final IBatchItemReader<CustomerDataBNK> customerDataBNKReader;
+
     private final IBatchItemProcessor<Customer, Customer> customerProcessor;
+    private final IBatchItemProcessor<CustomerDataBNK, Customer> customerDataBNKProcessor;
+
     private final IItemStreamItemWriter<Customer> customerFlatFileWriter;
 
     private final SkipListener<Customer, Customer> customerSkipListener;
@@ -46,7 +54,7 @@ public class CustomerBatchConfig {
 
     @Bean
     public Step customerStep1() {
-        return new StepBuilder(CUSTOMER_STEP_NAME, jobRepository)
+        return new StepBuilder(CUSTOMER_STEP_1_NAME, jobRepository)
                 .<Customer, Customer>chunk(CHUNK, transactionManager)
                 .reader(customerReader.createReader(new FileSystemResource(customerSource1)))
                 .processor(customerProcessor)
@@ -70,9 +78,25 @@ public class CustomerBatchConfig {
     }
 
     @Bean
+    public Step customerStep2() {
+        return new StepBuilder(CUSTOMER_STEP_2_NAME, jobRepository)
+                .<CustomerDataBNK, Customer>chunk(CHUNK, transactionManager)
+                .reader(customerDataBNKReader.createReader(new FileSystemResource(customerSource2)))
+                .processor(customerDataBNKProcessor)
+                .writer(customerFlatFileWriter)
+                .faultTolerant()
+                .skip(LineNotFormated.class)
+                .skipLimit(SKIP_LIMIT)
+                .listener(customerSkipListener)
+                .listener(stepExecutionListener)
+                .build();
+    }
+
+    @Bean
     public Job customerJob() {
-        return new JobBuilder(CUSTOMER_JOB_NAME, jobRepository)
+        return new JobBuilder(CUSTOMER_JOB_1_NAME, jobRepository)
                 .start(customerStep1())
+                .next(customerStep2())
                 .build();
     }
 }

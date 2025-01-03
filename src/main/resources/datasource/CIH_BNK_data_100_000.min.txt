@@ -1,0 +1,8 @@
+bankname, uuid,firstName,lastName,salary
+CIH-BNK,441bf2b9-6b82-40f9-b129-8be7887623ae,James,Brown,22
+CIH-BNK,462ea21d-137e-4105-90c7-5c51d0217a85,Sarah,Brown,18
+CIH-BNK,a9be3e67-c8da-4832-b349-b2af060bb6f2,Sarah,Davis,24
+CIH-BNK,ede98613-4ac7-41e8-9f97-251da722a540,Jane,Jones,34
+CIH-BNK,bae27123-a4a4-4823-9c7a-2cefad56fa7b,Jane,Johnson,33
+CIH-BNK,77bd7e05-276a-4005-97ba-fe4d09a47ac1,Laura,Wilson,26
+CIH-BNK,3cb9d6e8-91a2-4724-a931-a3f8ecacd637,John,Davis,28
