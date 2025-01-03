@@ -30,6 +30,7 @@ public abstract class AbstractFlatFileItemWriter<T> implements IItemStreamItemWr
         this.flatFileItemWriter = new FlatFileItemWriterBuilder<T>()
                 .name("FLAT-FILE-WRITER-" + getTargetClass().getSimpleName().toUpperCase())
                 .resource(getResource())
+                .append(true)
                 .delimited()
                 .delimiter(getDelimiter().getDelimiter())
                 .names(getColumnNames())

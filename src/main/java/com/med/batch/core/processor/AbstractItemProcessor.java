@@ -6,6 +6,7 @@ public abstract class AbstractItemProcessor<I, O> implements IBatchItemProcessor
 
     @Override
     public O process(@NonNull I item) throws Exception {
+        beforeProcess(item);
         if (validate(item)) {
             return doProcess(item);
         }
@@ -16,5 +17,5 @@ public abstract class AbstractItemProcessor<I, O> implements IBatchItemProcessor
 
     protected abstract O doProcess(I item) throws Exception;
 
-
+    protected abstract void beforeProcess(I item) throws Exception;
 }
