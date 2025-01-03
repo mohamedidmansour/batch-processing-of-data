@@ -1,17 +1,23 @@
 package com.med.batch.job.customer.processor;
 
 import com.med.batch.core.processor.AbstractItemProcessor;
+import com.med.batch.exception.LineNotFormated;
 import com.med.batch.model.Customer;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
-import java.util.Objects;
 
+@Slf4j
 @Component
 public class CustomerProcessor extends AbstractItemProcessor<Customer, Customer> {
     @Override
-    protected boolean validate(Customer customer) {
-        return customer != null;
+    protected boolean validate(Customer customer) throws LineNotFormated {
+        boolean isValid = customer.isValid();
+        if (!isValid) {
+            log.error("Customer is not valid {}", customer);
+            throw new LineNotFormated("Customer is not valid");
+        }
+        return true;
     }
 
     @Override
@@ -22,9 +28,6 @@ public class CustomerProcessor extends AbstractItemProcessor<Customer, Customer>
     }
 
     @Override
-    protected void beforeProcess(Customer item) throws Exception {
-        if (Objects.equals(item.getId(), "f0a7bc3e-6c20-4161-9504-773fb5de73d5")) {
-           throw new Exception("before process customer id equals 57ae9a4d.....");
-        }
+    protected void beforeProcess(Customer item) {
     }
 }

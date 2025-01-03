@@ -1,5 +1,6 @@
 package com.med.batch.core.processor;
 
+import com.med.batch.exception.LineNotFormated;
 import lombok.NonNull;
 
 public abstract class AbstractItemProcessor<I, O> implements IBatchItemProcessor<I, O> {
@@ -13,7 +14,7 @@ public abstract class AbstractItemProcessor<I, O> implements IBatchItemProcessor
         return null;
     }
 
-    protected abstract boolean validate(I item);
+    protected abstract boolean validate(I item) throws LineNotFormated;
 
     protected abstract O doProcess(I item) throws Exception;
 
