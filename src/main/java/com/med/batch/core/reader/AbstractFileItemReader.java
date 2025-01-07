@@ -3,7 +3,9 @@ package com.med.batch.core.reader;
 import com.med.batch.interfaces.Deliminator;
 import lombok.NonNull;
 import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.LineMapper;
+import org.springframework.batch.item.file.MultiResourceItemReader;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
@@ -24,7 +26,7 @@ public abstract class AbstractFileItemReader<T> implements IBatchItemReader<T> {
     protected abstract int getLinesToSkip();
 
     @Override
-    public ItemReader<T> createReader(Resource resource) {
+    public ItemReader<T> createReader(@NonNull Resource resource) {
         return new FlatFileItemReaderBuilder<T>()
                 .name(getTargetClass().getSimpleName().toUpperCase() + "-READER")
                 .resource(resource)
@@ -38,6 +40,27 @@ public abstract class AbstractFileItemReader<T> implements IBatchItemReader<T> {
                 .linesToSkip(getLinesToSkip())
                 .lineMapper(lineMapper())
                 .build();
+    }
+
+    @Override
+    public ItemReader<T> createReaderBaseInMultiResource(@NonNull Resource[] resource) {
+        FlatFileItemReader<T> readerBuilder = new FlatFileItemReaderBuilder<T>()
+                .name(getTargetClass().getSimpleName().toUpperCase() + "-READER-MULTI-SOURCE")
+                .strict(false)
+                .recordSeparatorPolicy(new DefaultRecordSeparatorPolicy() {
+                    @Override
+                    public boolean isEndOfRecord(@NonNull String line) {
+                        return super.isEndOfRecord(line) && !line.trim().isEmpty();
+                    }
+                })
+                .linesToSkip(getLinesToSkip())
+                .lineMapper(lineMapper())
+                .build();
+
+        MultiResourceItemReader<T> reader = new MultiResourceItemReader<>();
+        reader.setResources(resource);
+        reader.setDelegate(readerBuilder);
+        return reader;
     }
 
     private LineMapper<T> lineMapper() {

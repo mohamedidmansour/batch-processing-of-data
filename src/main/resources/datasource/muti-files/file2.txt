@@ -1,0 +1,11 @@
+uuid,firstName,lastName,salary
+7480e3c3-4cbe-4300-9656-4751be7e52a7,Stefanie,Bennett,36
+bdc102fb-fdf4-44e7-b692-243157818a6c,Jimmy,Johnson,29
+7af66f34-1846-426e-b680-0712b9f96fd9,Lori,Green,30
+0124082c-a1d4-46df-8c97-106c01570b0c,Richard,Webb,28
+50777006-658f-4bbd-b740-a44af94306d5,Julian,Allen,32
+dd62ccd9-189b-42e1-ad94-af72a1474709,Seth,Romero,27
+cab6f289-c00e-4fdb-a204-b20f2e49dd0d,George,Morgan,22
+d6a2d177-3b24-4bb7-aaee-b10277701397,Felicia,Douglas,35
+9115c9f9-b02c-412d-bce1-5673f445f1f4,Erika,Cross,34
+10499422-415c-44b6-8193-1beb5b446b17,Jonathan,Warren,26

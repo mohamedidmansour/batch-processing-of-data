@@ -18,7 +18,10 @@ spring:
     jdbc:
       initialize-schema: always
     job:
-      enabled: true
+      enabled: false
+  rabbitmq:
+    password: guest
+    username: guest
 
 logging:
   level:
@@ -30,3 +33,11 @@ server:
 
 batch:
   resource: "src/main/resources/customers-data.txt"
+
+mq:
+  queue-customer: customer.queue
+  queue-customer-bnk: customer.bnk.queue
+  exchange-customer: customer.exchange
+  exchange-customer-bnk: customer.exchange.bnk
+  binding-customer: customer.direct.key
+  binding-customer-bnk: customer.bnk.direct.key
